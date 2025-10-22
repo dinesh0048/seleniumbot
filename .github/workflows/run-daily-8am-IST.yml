@@ -1,9 +1,9 @@
-name: Run Selenium Automation Every 5 Minutes
+name: Run Selenium Automation Daily at 8 AM IST
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
-  workflow_dispatch:        # Allows manual trigger from Actions tab
+    - cron: '30 2 * * *'  # 2:30 AM UTC = 8:00 AM IST
+  workflow_dispatch:      # Allows manual trigger from Actions tab
 
 jobs:
   run-jar:
@@ -27,6 +27,16 @@ jobs:
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
           rm google-chrome-stable_current_amd64.deb
           google-chrome --version
+
+      - name: Install ChromeDriver matching Chrome version
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f1)
+          echo "Detected Chrome version: $CHROME_VERSION"
+          wget -qO /tmp/chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip"
+          unzip /tmp/chromedriver.zip -d /usr/local/bin/
+          rm /tmp/chromedriver.zip
+          chmod +x /usr/local/bin/chromedriver
+          chromedriver --version
 
       - name: Run Selenium Jar
         run: |
