@@ -1,0 +1,33 @@
+name: Run Selenium Automation Every 5 Minutes
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # Every 10 minutes
+  workflow_dispatch:        # Allows manual trigger from Actions tab
+
+jobs:
+  run-jar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+          rm google-chrome-stable_current_amd64.deb
+          google-chrome --version
+
+      - name: Run Selenium Jar
+        run: |
+          echo "🚀 Starting CombineDownloadMergeTelegram.jar ..."
+          java -jar CombineDownloadMergeTelegram.jar
