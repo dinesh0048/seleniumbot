@@ -1,8 +1,8 @@
-name: Run Selenium Automation Daily at 1:15 PM IST
+name: Run Selenium Automation Daily at 6:00 AM IST
 
 on:
   schedule:
-    - cron: '45 7 * * *'  # 07:45 UTC = 1:15 PM IST
+    - cron: '30 0 * * *'  # 00:30 UTC = 6:00 AM IST
   workflow_dispatch:      # Allows manual trigger from Actions tab
 
 jobs:
