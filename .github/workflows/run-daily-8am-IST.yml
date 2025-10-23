@@ -1,8 +1,8 @@
-name: Run Selenium Automation Daily at 12:35 PM IST
+name: Run Selenium Automation Daily at 1:15 PM IST
 
 on:
   schedule:
-    - cron: '5 7 * * *'  # 7:05 AM UTC = 12:35 PM IST
+    - cron: '45 7 * * *'  # 07:45 UTC = 1:15 PM IST
   workflow_dispatch:      # Allows manual trigger from Actions tab
 
 jobs:
@@ -19,44 +19,14 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Install Google Chrome
+      - name: Install Google Chrome and ChromeDriver (auto-match)
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Verify Chrome and ChromeDriver
         run: |
-          sudo apt update
-          sudo apt install -y wget unzip curl
-          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo apt install -y ./google-chrome-stable_current_amd64.deb
-          rm google-chrome-stable_current_amd64.deb
           google-chrome --version
-
-      - name: Install ChromeDriver matching Chrome version
-        run: |
-          set -e
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
-          MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d '.' -f1)
-          echo "Detected Chrome version: $CHROME_VERSION"
-
-          DRIVER_URL=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json" \
-            | grep -A 3 "\"version\": \"$CHROME_VERSION\"" \
-            | grep "chromedriver-linux64.zip" \
-            | head -1 \
-            | sed -E 's/.*https/https/' \
-            | sed -E 's/\".*//')
-
-          if [ -z "$DRIVER_URL" ]; then
-            echo "⚠️ Exact match not found, trying latest available for major version $MAJOR_VERSION"
-            DRIVER_URL=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json" \
-              | grep -A 3 "\"version\": \"$MAJOR_VERSION" \
-              | grep "chromedriver-linux64.zip" \
-              | head -1 \
-              | sed -E 's/.*https/https/' \
-              | sed -E 's/\".*//')
-          fi
-
-          echo "Downloading ChromeDriver from: $DRIVER_URL"
-          wget -qO /tmp/chromedriver.zip "$DRIVER_URL"
-          unzip -o /tmp/chromedriver.zip -d /usr/local/bin/
-          rm /tmp/chromedriver.zip
-          chmod +x /usr/local/bin/chromedriver
           chromedriver --version
 
       - name: Run Selenium Jar
