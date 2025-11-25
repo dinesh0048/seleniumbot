@@ -1,14 +1,11 @@
-name: Run Selenium Automation Daily at 6:00 AM IST
-
+name: Run Selenium Automation Daily at 5:00 AM IST
 on:
   schedule:
-    - cron: '30 0 * * *'  # 00:30 UTC = 6:00 AM IST
-  workflow_dispatch:      # Allows manual trigger from Actions tab
-
+    - cron: '30 23 * * *' # 23:30 UTC = 5:00 AM IST
+  workflow_dispatch: # Allows manual trigger from Actions tab
 jobs:
   run-jar:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,5 +28,5 @@ jobs:
 
       - name: Run Selenium Jar
         run: |
-          echo "🚀 Starting CombineDownloadMergeTelegram.jar ..."
-          java -jar CombineDownloadMergeTelegram.jar
+          echo "🚀 Starting UnifiedAutomation.jar ..."
+          java -jar UnifiedAutomation.jar
