@@ -28,5 +28,5 @@ jobs:
 
       - name: Run Selenium Jar
         run: |
-          echo "🚀 Starting UnifiedAutomation.jar ..."
-          java -jar UnifiedAutomation.jar
+          echo "🚀 Starting githubtest.jar ..."
+          java -jar githubtest.jar
